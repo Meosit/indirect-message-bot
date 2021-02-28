@@ -1,11 +1,15 @@
 package by.mksn.indimebot
 
 import by.mksn.indimebot.bot.handle
+import by.mksn.indimebot.misc.hashSHA256
+import by.mksn.indimebot.output.ApiRequest
 import by.mksn.indimebot.telegram.Update
+import by.mksn.indimebot.ui.rootPageHtml
 import io.ktor.application.*
 import io.ktor.client.features.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -48,9 +52,28 @@ fun Application.main() {
             }
             call.respond(HttpStatusCode.OK)
         }
-        get("/") {
-            call.respondText("What are you looking here?", ContentType.Text.Html)
+        post("/send-message") {
+            try {
+                val (token, message) = call.receive<ApiRequest>()
+                val foundUser = context.userStore.findByHash(token.hashSHA256())
+                if (foundUser != null) {
+                    context.sender.sendText(foundUser.id, message)
+                    call.respond(HttpStatusCode.OK)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
+            } catch (e: Exception) {
+                logger.error("Uncaught exception: ", e)
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
+        get("/") {
+            rootPageHtml()
+        }
+        static("assets") {
+            resources("assets")
+        }
+
     }
 }
 
