@@ -10,4 +10,5 @@ data class Message(
     val from: TelegramUser? = null,
     val date: Int,
     val chat: Chat,
+    val entities: List<MessageEntity> = emptyList()
 )

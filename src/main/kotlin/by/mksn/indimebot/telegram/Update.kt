@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Update(
     @SerialName("update_id") val updateId: Long,
-    val message: Message? = null,
-    val entities: List<MessageEntity>? = null
+    val message: Message? = null
 )
 

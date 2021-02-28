@@ -9,7 +9,6 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
 import java.io.InputStreamReader
@@ -26,8 +25,6 @@ data class AppContext(
     val userStore: UserStore,
     val messages: Messages,
 ) {
-
-    val maxOutputLength = 4096
 
     companion object {
         private fun initializeDataSource(dbUrl: String): UserStore {
@@ -50,9 +47,6 @@ data class AppContext(
             .getResourceAsStream(resourceBaseName)
             .let { it ?: throw IllegalStateException("Null resource stream for $resourceBaseName") }
             .use { InputStreamReader(it).use(InputStreamReader::readText) }
-
-        private fun <T> Json.load(resourceBaseName: String, deserializer: DeserializationStrategy<T>): T =
-            this.decodeFromString(deserializer, loadResourceAsString(resourceBaseName))
 
         fun init(dbUrl: String, botToken: String, appUrl: String): AppContext {
             val json = Json { ignoreUnknownKeys = true }
