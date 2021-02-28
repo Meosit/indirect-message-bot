@@ -48,6 +48,9 @@ fun Application.main() {
             }
             call.respond(HttpStatusCode.OK)
         }
+        get("/") {
+            call.respondText("What are you looking here?", ContentType.Text.Html)
+        }
     }
 }
 

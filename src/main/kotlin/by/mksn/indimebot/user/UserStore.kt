@@ -63,7 +63,7 @@ class UserStore private constructor() {
 CREATE TABLE IF NOT EXISTS users (
   id              BIGINT NOT NULL,
   name            TEXT NOT NULL,
-  token_hash      CHAR(64) NOT NULL
+  token_hash      CHAR(64) NOT NULL,
   username        TEXT NULL,
   passphrase_hash CHAR(64) NULL,
   PRIMARY KEY (id),
