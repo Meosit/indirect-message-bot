@@ -97,7 +97,7 @@ WHERE id = ? OR username = ?
         private const val SELECT_BY_HASH = """
 SELECT id, name, token_hash, username, passphrase_hash
 FROM users 
-WHERE NVL(passphrase_hash, token_hash) = ? OR token_hash = ?
+WHERE COALESCE(passphrase_hash, token_hash) = ? OR token_hash = ?
 """
 
         private const val DELETE_BY_ID = """DELETE FROM users WHERE id = ?"""
