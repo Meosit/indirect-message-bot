@@ -1,0 +1,1 @@
+❗️ Your passphrase or generated token has been compromised intentionally or unintentionally. To avoid possible spam messages, please rerun /start and /passphrase commands.

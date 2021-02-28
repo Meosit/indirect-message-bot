@@ -1,0 +1,1 @@
+❗️ Passphrase require your username which is not yet set, please set a username in the telegram settings to use this feature

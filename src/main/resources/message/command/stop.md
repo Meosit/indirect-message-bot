@@ -1,0 +1,1 @@
+✅ Your data has successfully deleted from the database. To continue using this bot type a /start command again.
