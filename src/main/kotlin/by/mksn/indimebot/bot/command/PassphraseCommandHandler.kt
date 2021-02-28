@@ -12,12 +12,14 @@ object PassphraseCommandHandler: BotCommandHandler {
         val passphrase = text.removePrefix(command).trim()
         val foundUser = context.userStore.findByIdOrUsername(user.id)
         when {
+            passphrase.isBlank() ->
+                context.sender.sendText(user.id, context.messages.error("passphrase-blank"))
             foundUser == null ->
                 context.sender.sendText(user.id, context.messages.error("bot-not-started"))
             user.username == null ->
                 context.sender.sendText(user.id, context.messages.error("passphrase-no-username"))
             !passphrase.startsWith(user.username) ->
-                context.sender.sendText(user.id, context.messages.error("passphrase-prefix"))
+                context.sender.sendText(user.id, context.messages.error("passphrase-prefix", "username" to user.username))
             else -> {
                 val passphraseHash = passphrase.hashSHA256()
                 val existingUser = context.userStore.findByHash(passphraseHash)
@@ -30,7 +32,7 @@ object PassphraseCommandHandler: BotCommandHandler {
                     val message = if (context.userStore.upsert(updatedUser)) {
                         context.messages.command("passphrase")
                     } else {
-                        context.messages.error("update-failed")
+                        context.messages.error("update-failed",  "username" to user.username)
                     }
                     context.sender.sendText(user.id, message)
                 } else {
