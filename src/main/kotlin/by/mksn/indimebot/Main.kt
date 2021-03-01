@@ -1,6 +1,7 @@
 package by.mksn.indimebot
 
 import by.mksn.indimebot.bot.handle
+import by.mksn.indimebot.misc.escapeMarkdown
 import by.mksn.indimebot.misc.hashSHA256
 import by.mksn.indimebot.output.ApiRequest
 import by.mksn.indimebot.telegram.Update
@@ -57,7 +58,7 @@ fun Application.main() {
                 val (token, message) = call.receive<ApiRequest>()
                 val foundUser = context.userStore.findByHash(token.hashSHA256())
                 if (foundUser != null) {
-                    context.sender.sendText(foundUser.id, message)
+                    context.sender.sendText(foundUser.id, message.escapeMarkdown())
                     call.respond(HttpStatusCode.OK)
                 } else {
                     call.respond(HttpStatusCode.NotFound)

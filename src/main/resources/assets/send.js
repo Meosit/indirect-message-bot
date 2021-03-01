@@ -36,19 +36,21 @@ $(function() {
           200: function(xhr) {
             $('#result-notification').addClass("alert-success").removeClass("hidden")
             $('#result-notification').text("Message sent!").fadeOut(10000, function() {
-              $('#result-notification').addClass("hidden")
+              $('#result-notification').addClass("hidden").removeAttr("style");
             });
+            $('#message-text').val("")
           },
           400: function(xhr) {
             $('#result-notification').addClass("alert-error").removeClass("hidden")
             $('#result-notification').text("Invalid input passed").fadeOut(10000, function() {
-              $('#result-notification').addClass("hidden")
+
+              $('#result-notification').addClass("hidden").removeAttr("style");
             });
           },
           404: function(xhr) {
             $('#result-notification').addClass("alert-error").removeClass("hidden")
             $('#result-notification').text("Provided token or passphrase is invalid").fadeOut(10000, function() {
-              $('#result-notification').addClass("hidden")
+              $('#result-notification').addClass("hidden").removeAttr("style");
             });
           }
         }
