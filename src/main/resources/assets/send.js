@@ -34,22 +34,21 @@ $(function() {
       url: '/send-message',
       statusCode: {
           200: function(xhr) {
-            $('#result-notification').addClass("alert-success").removeClass("hidden")
-            $('#result-notification').text("Message sent!").fadeOut(10000, function() {
+            $('#result-notification').removeClass("alert-error").addClass("alert-success").removeClass("hidden")
+            $('#result-notification').finish().text("Message sent!").fadeOut(10000, function() {
               $('#result-notification').addClass("hidden").removeAttr("style");
             });
             $('#message-text').val("")
           },
           400: function(xhr) {
-            $('#result-notification').addClass("alert-error").removeClass("hidden")
-            $('#result-notification').text("Invalid input passed").fadeOut(10000, function() {
-
+            $('#result-notification').removeClass("alert-success").addClass("alert-error").removeClass("hidden")
+            $('#result-notification').finish().text("Invalid input passed").fadeOut(10000, function() {
               $('#result-notification').addClass("hidden").removeAttr("style");
             });
           },
           404: function(xhr) {
-            $('#result-notification').addClass("alert-error").removeClass("hidden")
-            $('#result-notification').text("Provided token or passphrase is invalid").fadeOut(10000, function() {
+            $('#result-notification').removeClass("alert-success").addClass("alert-error").removeClass("hidden")
+            $('#result-notification').finish().text("Provided token or passphrase is invalid").fadeOut(10000, function() {
               $('#result-notification').addClass("hidden").removeAttr("style");
             });
           }
