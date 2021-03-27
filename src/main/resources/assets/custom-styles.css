@@ -25,3 +25,11 @@ input[type="submit"].button-primary {
     display: flex;
     justify-content: center;
 }
+
+input[type="file"] {
+    display: none;
+}
+
+#attachment-name {
+    margin-left: 1em;
+}

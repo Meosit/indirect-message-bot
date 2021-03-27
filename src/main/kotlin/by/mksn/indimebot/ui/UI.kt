@@ -9,10 +9,11 @@ import kotlinx.html.*
 
 fun HEAD.styles() {
     link(rel = "stylesheet", href = "//cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css")
+    link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css")
     link(rel = "stylesheet", href = "/assets/skeleton-alerts.css")
     link(rel = "stylesheet", href = "/assets/custom-styles.css")
     link(rel = "shortcut icon", href = "/assets/favicon.ico", type = "image/x-icon")
-    link(rel = "icon", href = "/favicon/favicon.ico", type = "image/x-icon")
+    link(rel = "icon", href = "/assets/favicon.ico", type = "image/x-icon")
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.rootPageHtml() {
@@ -64,11 +65,37 @@ suspend fun PipelineContext<Unit, ApplicationCall>.rootPageHtml() {
                         htmlFor = "message-text"
                         +"Message to send"
                     }
-                    textArea(classes = "u-full-width") {
+                    textArea(classes = "u-full-width u-full-height") {
                         maxLength = "$maxBotOutputLength"
                         id = "message-text"
                         placeholder = "Hello from the other side.."
-                        required = true
+                        required = false
+                    }
+                    div("row") {
+                        div("eight columns") {
+                            label("button") {
+                                htmlFor = "message-attachment"
+                                i("fa fa-file")
+                                +" Attachment (max 10MB)"
+                            }
+                            input(InputType.file) {
+                                id = "message-attachment"
+                                multiple = false
+                                required = false
+                            }
+                            span("label-body") {
+                                id = "attachment-name"
+                            }
+                        }
+                        div("four columns") {
+                            label(classes = "u-pull-right") {
+                                input(InputType.checkBox) {
+                                    id = "compress-images"
+                                    checked = true
+                                }
+                                span("label-body") { +"Send images with compression" }
+                            }
+                        }
                     }
                     div("display-center") {
                         input(InputType.submit, classes = "button-primary") {

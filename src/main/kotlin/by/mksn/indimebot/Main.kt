@@ -3,7 +3,6 @@ package by.mksn.indimebot
 import by.mksn.indimebot.bot.handle
 import by.mksn.indimebot.misc.escapeMarkdown
 import by.mksn.indimebot.misc.hashSHA256
-import by.mksn.indimebot.output.ApiRequest
 import by.mksn.indimebot.telegram.Update
 import by.mksn.indimebot.ui.rootPageHtml
 import io.ktor.application.*
@@ -55,11 +54,32 @@ fun Application.main() {
         }
         post("/send-message") {
             try {
-                val (token, message) = call.receive<ApiRequest>()
+                val parts = call.receiveMultipart().readAllParts()
+                val token = (parts.firstOrNull { it.name == "token" } as? PartData.FormItem)?.value
+                    ?: throw IllegalArgumentException("No token")
+                val message = (parts.firstOrNull { it.name == "message-text" } as? PartData.FormItem)?.value
+                val compressImages = (parts.firstOrNull { it.name == "compress-images" } as? PartData.FormItem)?.value.toBoolean()
+                val attachment = parts.firstOrNull { it.name == "attachment" } as? PartData.FileItem
+
+
                 val foundUser = context.userStore.findByHash(token.hashSHA256())
                 if (foundUser != null) {
-                    context.sender.sendText(foundUser.id, message.escapeMarkdown())
-                    call.respond(HttpStatusCode.OK)
+                    when {
+                        attachment != null -> {
+                            val contentType = attachment.contentType ?: throw IllegalArgumentException("No content type")
+                            if (contentType.match(ContentType.Image.Any) && compressImages) {
+                                context.sender.sendImage(foundUser.id, attachment, message?.escapeMarkdown())
+                            } else {
+                                context.sender.sendFile(foundUser.id, attachment, message?.escapeMarkdown())
+                            }
+                            call.respond(HttpStatusCode.OK)
+                        }
+                        message != null -> {
+                            context.sender.sendText(foundUser.id, message.escapeMarkdown())
+                            call.respond(HttpStatusCode.OK)
+                        }
+                        else -> call.respond(HttpStatusCode.BadRequest)
+                    }
                 } else {
                     call.respond(HttpStatusCode.NotFound)
                 }
