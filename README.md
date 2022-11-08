@@ -16,8 +16,6 @@ See [@indimebot](https://t.me/indimebot)
 * `/help` - show help message
 * `/start` - generate/regenerate a new user token to be used as service password
 * `/passphrase <username><passphrase>` - set a passphrase which can be used instead of a token, must start with your username (for uniqueness). Please do not use any of your passwords, it could be something relatively simple
-* `/allow <user mention>` - allow different telegram user to write to you via this bot. This bot must be already started by mentioned user, no effect otherwise.
-* `/deny <user mention>` - deny access for the user which were previously granted by `/allow` command.
 * `/stop` - delete this user info from bot DB, to start using bot again need send `/start` command again.
 
 ## Deployment
